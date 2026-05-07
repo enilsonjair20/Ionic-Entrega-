@@ -1,0 +1,78 @@
+<!-- Contenedor Principal -->
+<div class="flex h-screen bg-natural-bg font-sans overflow-hidden">
+  
+  <!-- Sidebar (Desktop) -->
+  <aside class="hidden md:flex w-72 bg-natural-sidebar border-r border-natural-border flex-col p-8 z-50">
+    <div class="flex items-center gap-3 mb-12">
+      <div class="w-10 h-10 bg-natural-primary rounded-xl flex items-center justify-center text-white">
+        <mat-icon>healing</mat-icon>
+      </div>
+      <h1 class="text-xl font-semibold tracking-tight text-natural-text-dark">Medilink</h1>
+    </div>
+
+    <nav class="space-y-2 flex-grow">
+      <a routerLink="/" 
+         routerLinkActive="bg-natural-primary text-white shadow-sm" 
+         [routerLinkActiveOptions]="{exact: true}"
+         class="w-full flex items-center gap-4 px-4 py-3 text-natural-text-muted hover:bg-[#EAE4D7] rounded-2xl transition-all no-underline">
+        <mat-icon class="!text-xl">home</mat-icon>
+        <span class="font-medium">Inicio</span>
+      </a>
+      <a routerLink="/perfil" 
+         routerLinkActive="bg-natural-primary text-white shadow-sm"
+         class="w-full flex items-center gap-4 px-4 py-3 text-natural-text-muted hover:bg-[#EAE4D7] rounded-2xl transition-all no-underline">
+        <mat-icon class="!text-xl">person</mat-icon>
+        <span class="font-medium">Perfil</span>
+      </a>
+      <a routerLink="/contacto" 
+         routerLinkActive="bg-natural-primary text-white shadow-sm"
+         class="w-full flex items-center gap-4 px-4 py-3 text-natural-text-muted hover:bg-[#EAE4D7] rounded-2xl transition-all no-underline">
+        <mat-icon class="!text-xl">chat_bubble</mat-icon>
+        <span class="font-medium">Contacto</span>
+      </a>
+    </nav>
+
+    <!-- User Profile Widget (Sidebar) -->
+    <div class="mt-auto p-4 bg-[#EAE4D7] rounded-3xl flex items-center gap-3">
+      <div class="w-10 h-10 rounded-full bg-natural-accent flex items-center justify-center text-white font-bold select-none">JD</div>
+      <div class="overflow-hidden">
+        <p class="text-xs font-bold text-natural-text-dark truncate">Juan Dueñas</p>
+        <p class="text-[10px] text-natural-text-muted">Paciente</p>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Contenido Central -->
+  <div class="flex-1 flex flex-col min-w-0 h-full">
+    <!-- Header (Opcional - podrías incluir búsqueda aquí si fuera global) -->
+    
+    <main class="flex-1 overflow-y-auto no-scrollbar pb-24 md:pb-0">
+      <router-outlet />
+    </main>
+
+    <!-- Navegación Inferior (Mobile Only) -->
+    <nav class="md:hidden fixed bottom-0 left-0 right-0 h-20 bg-white/90 backdrop-blur-xl border-t border-natural-border flex items-center justify-around px-4 z-50 rounded-t-[32px] shadow-[0_-4px_20px_-5px_rgba(0,0,0,0.05)]">
+      <a routerLink="/" 
+         routerLinkActive="text-natural-primary" 
+         [routerLinkActiveOptions]="{exact: true}"
+         class="flex flex-col items-center justify-center space-y-1 text-natural-text-muted no-underline transition-colors duration-200 w-1/4">
+        <mat-icon class="!text-2xl">home</mat-icon>
+        <span class="text-[9px] font-bold uppercase tracking-wider">Inicio</span>
+      </a>
+
+      <a routerLink="/perfil" 
+         routerLinkActive="text-natural-primary"
+         class="flex flex-col items-center justify-center space-y-1 text-natural-text-muted no-underline transition-colors duration-200 w-1/4">
+        <mat-icon class="!text-2xl">person</mat-icon>
+        <span class="text-[9px] font-bold uppercase tracking-wider">Perfil</span>
+      </a>
+
+      <a routerLink="/contacto" 
+         routerLinkActive="text-natural-primary"
+         class="flex flex-col items-center justify-center space-y-1 text-natural-text-muted no-underline transition-colors duration-200 w-1/4">
+        <mat-icon class="!text-2xl">chat_bubble</mat-icon>
+        <span class="text-[9px] font-bold uppercase tracking-wider">Ayuda</span>
+      </a>
+    </nav>
+  </div>
+</div>
