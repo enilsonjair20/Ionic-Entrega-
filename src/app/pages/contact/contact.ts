@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 
@@ -47,14 +47,28 @@ import {MatIconModule} from '@angular/material/icon';
         </div>
       </div>
 
-      <!-- FAQ Section -->
+      <!-- FAQ Section Accordion -->
       <section class="mt-16">
         <h2 class="text-xs font-bold uppercase tracking-widest text-natural-text-muted mb-6">Preguntas Frecuentes</h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          @for (faq of faqs; track faq.q) {
-            <div class="bg-natural-sidebar/40 p-6 rounded-2xl border border-natural-border">
-              <p class="font-bold text-natural-text-dark text-sm mb-2">{{ faq.q }}</p>
-              <p class="text-xs text-natural-text-muted leading-relaxed">{{ faq.a }}</p>
+        <div class="flex flex-col gap-4">
+          @for (faq of faqs; track faq.q; let idx = $index) {
+            <div class="bg-white rounded-3xl border border-natural-border overflow-hidden transition-all duration-300"
+                 [class.shadow-md]="activeFaq() === idx">
+              <button (click)="toggleFaq(idx)" 
+                      class="w-full p-6 text-left flex items-center justify-between text-natural-text-dark font-bold text-sm focus:outline-none transition-colors hover:bg-natural-sidebar/10">
+                <span>{{ faq.q }}</span>
+                <span class="text-natural-primary text-lg transition-transform duration-300"
+                      [style.transform]="activeFaq() === idx ? 'rotate(180deg)' : 'rotate(0)'">
+                  ▼
+                </span>
+              </button>
+              
+              <div class="transition-all duration-300 overflow-hidden"
+                   [style.max-height]="activeFaq() === idx ? '150px' : '0px'">
+                <div class="p-6 pt-0 border-t border-natural-border/30 text-xs text-natural-text-muted leading-relaxed">
+                  {{ faq.a }}
+                </div>
+              </div>
             </div>
           }
         </div>
@@ -69,9 +83,19 @@ import {MatIconModule} from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Contact {
+  activeFaq = signal<number | null>(null);
+
   faqs = [
     { q: '¿Cuánto tarda el envío?', a: 'Usualmente entre 30 y 60 minutos dependiendo de tu ubicación.' },
-    { q: '¿Necesito receta médica?', a: 'Solo para medicamentos controlados. Puedes subirla al momento del pago.' },
-    { q: '¿Qué métodos de pago aceptan?', a: 'Tarjetas de crédito, débito, efectivo a la entrega y transferencias.' }
+    { q: '¿Necesito receta médica?', a: 'Solo para medicamentos de control especial. Puedes subirla con tu teléfono al momento del pago o entregarla físicamente al repartidor.' },
+    { q: '¿Qué métodos de pago aceptan?', a: 'Tarjetas de crédito, débito, efectivo a la entrega, transferencias y pago rápido express mediante billeteras electrónicas.' }
   ];
+
+  toggleFaq(idx: number) {
+    if (this.activeFaq() === idx) {
+      this.activeFaq.set(null);
+    } else {
+      this.activeFaq.set(idx);
+    }
+  }
 }

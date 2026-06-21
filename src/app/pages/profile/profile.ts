@@ -1,4 +1,4 @@
-import {Component, ChangeDetectionStrategy} from '@angular/core';
+import {Component, ChangeDetectionStrategy, signal} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MatIconModule} from '@angular/material/icon';
 import {ReactiveFormsModule, FormGroup, FormControl, Validators} from '@angular/forms';
@@ -7,7 +7,7 @@ import {ReactiveFormsModule, FormGroup, FormControl, Validators} from '@angular/
   selector: 'app-profile',
   imports: [CommonModule, MatIconModule, ReactiveFormsModule],
   template: `
-    <div class="px-6 py-10 md:px-12 pb-32 max-w-2xl mx-auto">
+    <div class="px-6 py-10 md:px-12 pb-32 max-w-2xl mx-auto relative">
       <!-- Header -->
       <header class="mb-10 flex items-center justify-between">
         <div>
@@ -21,7 +21,7 @@ import {ReactiveFormsModule, FormGroup, FormControl, Validators} from '@angular/
 
       <!-- Formulario de Información Personal -->
       <div class="bg-white p-8 rounded-[32px] border border-natural-border shadow-sm">
-        <form [formGroup]="profileForm" class="space-y-6">
+        <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="space-y-6">
           <div>
             <label for="name" class="text-[10px] font-bold uppercase tracking-widest text-natural-text-muted block mb-2">Nombre Completo</label>
             <input id="name" type="text" formControlName="name" 
@@ -48,7 +48,7 @@ import {ReactiveFormsModule, FormGroup, FormControl, Validators} from '@angular/
             </div>
           </div>
 
-          <button class="w-full py-4 bg-natural-primary text-white font-bold rounded-2xl shadow-lg shadow-natural-primary/20 hover:bg-natural-text-dark transition-all active:scale-95">
+          <button type="submit" class="w-full py-4 bg-natural-primary text-white font-bold rounded-2xl shadow-lg shadow-natural-primary/20 hover:bg-natural-text-dark transition-all active:scale-95 cursor-pointer">
             Guardar Cambios
           </button>
         </form>
@@ -72,15 +72,34 @@ import {ReactiveFormsModule, FormGroup, FormControl, Validators} from '@angular/
           </div>
         </div>
       </section>
+
+      <!-- Toast Flotante -->
+      @if (showSavedToast()) {
+        <div class="fixed top-6 left-1/2 -translate-x-1/2 bg-natural-primary text-white px-6 py-3 rounded-2xl shadow-lg flex items-center gap-3 z-50 animate-bounce">
+          <mat-icon>check_circle</mat-icon>
+          <span class="text-sm font-semibold">¡Cambios guardados con éxito!</span>
+        </div>
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Profile {
+  showSavedToast = signal(false);
+
   profileForm = new FormGroup({
-    name: new FormControl('Usuario Demo', Validators.required),
-    address: new FormControl('Calle Principal #123, Ciudad', Validators.required),
-    phone: new FormControl('+57 300 000 0000', Validators.required),
-    email: new FormControl('usuario@ejemplo.com', [Validators.required, Validators.email]),
+    name: new FormControl('Juan Dueñas', Validators.required),
+    address: new FormControl('Calle Roble 452, CDMX', Validators.required),
+    phone: new FormControl('+52 55 1234 5678', Validators.required),
+    email: new FormControl('juan.duenas@ejemplo.com', [Validators.required, Validators.email]),
   });
+
+  saveProfile() {
+    if (this.profileForm.valid) {
+      this.showSavedToast.set(true);
+      setTimeout(() => {
+        this.showSavedToast.set(false);
+      }, 3000);
+    }
+  }
 }
